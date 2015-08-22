@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 class UserOTHStatus(models.Model):
 	user = models.OneToOneField(User)
@@ -16,8 +17,9 @@ class UserOTHStatus(models.Model):
 class OTH(models.Model):
 	oth_id = models.CharField(max_length=10,unique=True)
 	title = models.CharField(max_length=200)
+	started = models.BooleanField(default=False)
 	completed = models.BooleanField(default=False)
-	start_time = models.DateTimeField()
+	start_time = models.DateTimeField(blank=True)
 	duration = models.IntegerField(blank=True)
 	user_oth_status = models.ForeignKey(UserOTHStatus)
 
@@ -28,12 +30,17 @@ class OTH(models.Model):
 	def __str__(self):
 		return OTH.title
 
+	def start(self):
+		started = True;
+		start_time = datetime.now()
+
 class Question(models.Model):
 	question_id = models.CharField(max_length=10,unique=True)
 	level = models.IntegerField()
 	text = models.TextField()
 	oth = models.ForeignKey(OTH)
 	question_image = models.ImageField(upload_to='/image/')
+	answer = models.CharField(max_length=100)
 
 	class Meta:
 		verbose_name = "Question"
