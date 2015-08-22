@@ -12,7 +12,13 @@ def logout_user(request):
 
 def create(request):
 
+
 	pass
 
-def 
+def view_oth_question(request):
 
+	pass
+
+def view_oth(request):
+
+	pass
