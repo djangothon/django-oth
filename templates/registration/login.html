@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
+{% block extrahead %}
+<title>Login - OTH App</title>
+{% endblock %}
+
 {% block content %}
 <div class="section">
 <div class="container">
 <div class="row">
-<div class="one column u-full-width">
+<div class="twelve columns">
 <h3>Login</h3>
 <form method="post" action=".">
   {% csrf_token %} 

@@ -3,7 +3,7 @@
 {% load staticfiles %}
 
 {% block extrahead %}
-<title>Create OTH - OTH App</title>
+<title>Home - OTH App</title>
 
 {% endblock %}
 
@@ -25,22 +25,14 @@
 		<hr>
 		<div class="row topmargin">
 			<div class="twelve columns">
-				<h4>Create OTH</h4>
-				{% if form %}
-				<form method="POST" action="">
-				{% csrf_token %}
-				{{form.as_p}}
-				<input type="submit" value="Create OTH">
-				</form>
+				<h4>Currently active OTHs</h4>
+				{% if active_oths %}
+					{% for oth in active_oths %}
+					<h5><a href="/view_oth/{{ oth.0 }}">{{ oth.1 }}</a></h5>
+					{% endfor %}
 				{% else %}
-					{% if messageclass == 'success' %}
-						<p>Successfully created OTH.</p>
-						<p>OTH id: <strong>{{oth_id}}<strong></p>
-						<a class="button button-primary" href="/add_question/{{oth_id}}">Add Questions</a>
-					{% endif %}
-
+				<p>Currently there are no active OTHs. Please check back later.</p>
 				{% endif %}
-				
 			</div>
 		</div>
 	</div>

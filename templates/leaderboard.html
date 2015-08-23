@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
-{% load staticfiles %}
-
 {% block extrahead %}
-<title>Create OTH - OTH App</title>
+<title>Leaderboard - OTH App</title>
 
 {% endblock %}
 
 {% block content %}
+
 	<div class="container topmargin">
 		<div class="row">
 			<div class="nine columns">
@@ -25,22 +24,30 @@
 		<hr>
 		<div class="row topmargin">
 			<div class="twelve columns">
-				<h4>Create OTH</h4>
-				{% if form %}
-				<form method="POST" action="">
-				{% csrf_token %}
-				{{form.as_p}}
-				<input type="submit" value="Create OTH">
-				</form>
-				{% else %}
-					{% if messageclass == 'success' %}
-						<p>Successfully created OTH.</p>
-						<p>OTH id: <strong>{{oth_id}}<strong></p>
-						<a class="button button-primary" href="/add_question/{{oth_id}}">Add Questions</a>
-					{% endif %}
+				<h4>{{ oth_title }}</h4>
 
+				{% if entries %}
+				<table>
+					<thead>
+						<td>Rank</td>
+						<td>User</td>
+						<td>Level</td>
+						<td>Time</td>
+					</thead>
+					{% for entry in entries %}
+					<tr>
+						<td>entry.0</td>
+						<td>entry.1.0</td>
+						<td>entry.1.1</td>
+						<td>entry.1.2</td>
+					</tr>
+					{% endfor %}
+
+				</table>
+
+				{% else %}
+				<p>{{ message }}</p>
 				{% endif %}
-				
 			</div>
 		</div>
 	</div>

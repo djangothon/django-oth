@@ -11,18 +11,6 @@ def update_image_name(instance,filename):
 	
 	return os.path.join(path,fmt)
 
-class UserOTHStatus(models.Model):
-	user = models.OneToOneField(User)
-	level = models.IntegerField()
-	started = models.BooleanField(default=False)
-	completed = models.BooleanField(default=False)
-	
-	class Meta:
-		verbose_name = "User OTH Status"
-		verbose_name_plural = "User OTH Statuses"
-
-	def __str__(self):
-		return self.user.username + " [Level: {}]".format(self.level)
 
 class OTH(models.Model):
 	oth_id = models.CharField(max_length=10,unique=True)
@@ -31,7 +19,6 @@ class OTH(models.Model):
 	completed = models.BooleanField(default=False)
 	start_time = models.DateTimeField(null=True,blank=True)
 	duration = models.IntegerField(blank=True)
-	user_oth_status = models.ForeignKey(UserOTHStatus,null=True,blank=True)
 
 	class Meta:
 		verbose_name = "OTH"
@@ -43,6 +30,20 @@ class OTH(models.Model):
 	def start(self):
 		started = True;
 		start_time = datetime.now()
+
+class UserOTHStatus(models.Model):
+	user = models.ForeignKey(User)
+	level = models.IntegerField()
+	started = models.BooleanField(default=False)
+	completed = models.BooleanField(default=False)
+	oth = models.ForeignKey(OTH)
+	
+	class Meta:
+		verbose_name = "User OTH Status"
+		verbose_name_plural = "User OTH Statuses"
+
+	def __str__(self):
+		return self.user.username + " [Level: {}]".format(self.level)
 
 class Question(models.Model):
 	question_id = models.CharField(max_length=10,unique=True)

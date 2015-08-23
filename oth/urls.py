@@ -3,8 +3,11 @@ from django.contrib import admin
 from django.conf import settings
 
 urlpatterns = [
+
+    url(r'^$','main.views.home',name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^logout/$','main.views.logout',name='logout'),
     url(r'^create/$','main.views.create',name='create'),
     url(r'^add_question/(?P<oth_id>[a-zA-Z0-9]+)$','main.views.add_question_to_oth',
     	name='add_question_to_oth'),
@@ -17,7 +20,6 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    # static files (images, css, javascript, etc.)
     urlpatterns += [
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': settings.MEDIA_ROOT})
