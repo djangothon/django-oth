@@ -6,7 +6,9 @@ from django.utils.crypto import get_random_string
 from .models import OTH, UserOTHStatus, Question
 from .forms import CreateOTHForm
 
+def home(request):
 
+	render(request,'index.html')
 
 def logout_user(request):
 	logout(request)
@@ -16,8 +18,11 @@ def logout_user(request):
 def create(request):
 	context = {}
 
+	form = CreateOTHForm()
 
-	pass
+	context['form'] = form
+
+	return render(request,'create_oth.html',context)
 
 def add_question_to_oth(request):
 
