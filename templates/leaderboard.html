@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{{{% extends "base.html" %}
 
 {% block extrahead %}
 <title>Leaderboard - OTH App</title>
@@ -24,23 +24,27 @@
 		<hr>
 		<div class="row topmargin">
 			<div class="twelve columns">
-				<h4>{{ oth_title }}</h4>
+				<h4>{{ oth_title }} Leaderboard</h4>
 
 				{% if entries %}
 				<table>
 					<thead>
-						<td>Rank</td>
-						<td>User</td>
-						<td>Level</td>
-						<td>Time</td>
+					<tr>
+						<th>Rank</th>
+						<th>User</th>
+						<th>Level</th>
+						<th>Time</th>
+					</tr>
 					</thead>
 					{% for entry in entries %}
+					<tbody>
 					<tr>
-						<td>entry.0</td>
-						<td>entry.1.0</td>
-						<td>entry.1.1</td>
-						<td>entry.1.2</td>
+						<td>{{entry.0}}</td>
+						<td>{{entry.1.0}}</td>
+						<td>{{entry.1.1}}</td>
+						<td>{{entry.1.2}}</td>
 					</tr>
+					</tbody>
 					{% endfor %}
 
 				</table>

@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.crypto import get_random_string
+from django.db.models import Max
 
 from .models import OTH, UserOTHStatus, Question
 from .forms import CreateOTHForm, AddQuestionToOTHForm
@@ -64,6 +65,10 @@ def create(request):
 def add_question_to_oth(request,oth_id):
 	context = {}
 
+	oth = OTH.objects.get(oth_id=oth_id)
+
+	level = oth.question_set.aggregate(Max('level'))['level__max']+ 1
+
 	if request.user.is_authenticated():
 		context['logged_in'] = True
 		context['username'] = request.user.username
@@ -71,13 +76,23 @@ def add_question_to_oth(request,oth_id):
 		context['logged_in'] = False
 
 	if request.method == "GET":
-		form = AddQuestionToOTHForm()
+		form = AddQuestionToOTHForm(initial={'oth_id':oth_id,'level':level})
 
 		context['form'] = form
+		context['oth_title'] = oth.title
+		context['oth_id'] = oth_id
 
-	elif request.method = "POST":
-		pass
-	pass
+	elif request.method == "POST":
+		form = AddQuestionToOTHForm(request.POST,request.FILES)
+		if form.is_valid():
+			form_data = form.cleaned_data
+
+			question_text = form_data['question_text']
+			level = form_data['level']
+
+
+
+	return render(request,'add_question.html',context)
 
 @login_required(login_url='login')
 def view_oth_question(request,oth_id,question_id):
@@ -89,7 +104,7 @@ def view_oth_question(request,oth_id,question_id):
 	else:
 		context['logged_in'] = False
 
-	pass
+	
 
 @login_required(login_url='login')
 def view_oth(request,oth_id):
@@ -106,8 +121,8 @@ def view_oth(request,oth_id):
 	if oth:
 		context['messageclass'] = 'success'
 		context['oth_title'] = oth.title
-		context['oth_id'] = oth.id
-		context['q_id'] = oth.questions_set.filter(level=1)
+		context['oth_id'] = oth.oth_id
+		context['q_id'] = oth.question_set.filter(level=1)[0].question_id
 
 	else:
 		context['messageclass'] = 'error'
@@ -129,10 +144,10 @@ def leaderboard(request,oth_id):
 	oth_queryset = UserOTHStatus.objects.filter(oth__oth_id=oth_id)
 
 	if oth_queryset:
-		leaderboard_queryset = oth_queryset.objects.order_by('-level','updated_at')
+		leaderboard_queryset = oth_queryset.order_by('-level','updated_at')
 		context['messageclass'] = 'success'
 		context['oth_title'] = leaderboard_queryset[0].oth.title
-		context['entries'] = [(i,(j.user.username, j.level, j.updated_at))
+		context['entries'] = [(i+1,(j.user.username, j.level, j.updated_at))
 			for i,j in enumerate(leaderboard_queryset)]
 	else:
 		context['messageclass'] = 'error'

@@ -37,7 +37,9 @@ class UserOTHStatus(models.Model):
 	started = models.BooleanField(default=False)
 	completed = models.BooleanField(default=False)
 	oth = models.ForeignKey(OTH)
-	
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+
 	class Meta:
 		verbose_name = "User OTH Status"
 		verbose_name_plural = "User OTH Statuses"
