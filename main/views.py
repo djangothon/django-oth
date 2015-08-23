@@ -104,6 +104,22 @@ def view_oth_question(request,oth_id,question_id):
 	else:
 		context['logged_in'] = False
 
+	oth = OTH.objects.get(oth_id=oth_id)
+	question = Question.objects.get(question_id=question_id)
+
+	if request.method == "GET":
+		form = SubmitAnswerForm()
+
+	elif request.method == "POST":
+		form = SubmitAnswerForm(request.POST)
+
+		if form.is_valid():
+			form_data = form.cleaned_data
+
+			answer = form_data['answer']
+
+			if question.answer.strip() == answer.strip():
+				pass
 	
 
 @login_required(login_url='login')
